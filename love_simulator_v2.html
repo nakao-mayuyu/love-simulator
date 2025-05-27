@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>恋愛シミュレーター</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #fefefe; }
+    .scene { margin-bottom: 1em; }
+    .choices button {
+      display: block;
+      margin: 0.5em 0;
+      padding: 0.5em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene" id="scene">ゲームを読み込み中...</div>
+  <div class="choices" id="choices"></div>
+
+  <script>
+    const story = {
+      start: {
+        text: "ゼミ終わりの教室、先生が片づけをしている.\n『なんか俺に用ある？』と聞いてきた。",
+        choices: [
+          { text: "…どうしてわかったんですか？", next: "q1" },
+          { text: "特になにもないで～す", next: "q2" }
+        ]
+      },
+      q1: {
+        text: "先生は笑う.\n『きみがそういう顔をしているときは、俺に話したいことがあるときだからね。』",
+        choices: [
+          { text: "…なんでもお見通しじゃないですか", next: "end1" }
+        ]
+      },
+      q2: {
+        text: "『そっかそっか～』先生はどんどん片づけを進めていく。",
+        choices: [
+          { text: "…", next: "end2" }
+        ]
+      },
+      end1: {
+        text: "『…で？どうしたの？』\n先生が私の顔を覗き込む。",
+        choices: [
+          { text: "……好きなんです", next: "confess" },
+          { text: "…今日の講義、面白かったです", next: "deflect" }
+        ]
+      },
+      end2: {
+        text: "『ほんとは話したいことあるんでしょ？』\n先生が振り返って聞いた。",
+        choices: [
+          { text: "…先生のこと、気になってて", next: "confess" },
+          { text: "ほんとになんでもないです", next: "walkaway" }
+        ]
+      },
+      confess: {
+        text: "先生は一瞬驚いた顔をして、すぐに笑った.\n『…やっぱり、そうだったんだね』",
+        choices: [
+          { text: "え…？", next: "maybe_love" }
+        ]
+      },
+      maybe_love: {
+        text: "『俺も君のこと、ちょっと特別に思ってたんだよね』\n教室の空気が少し変わった。",
+        choices: []
+      },
+      deflect: {
+        text: "『そっか…』先生は優しく笑って、でも少し寂しそうだった。",
+        choices: []
+      },
+      walkaway: {
+        text: "『そっか』\n先生はそれ以上何も言わず、また片づけに戻った。",
+        choices: []
+      }
+    };
+
+    function showScene(key) {
+      const scene = story[key];
+      document.getElementById("scene").innerText = scene.text;
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+
+      scene.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.text;
+        btn.onclick = () => showScene(choice.next);
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    showScene("start");
+  </script>
+</body>
+</html>
